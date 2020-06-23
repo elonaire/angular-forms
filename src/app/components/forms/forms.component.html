@@ -1,0 +1,38 @@
+<div>
+  <div>
+    <h2>{{formSchema?.formName}}</h2>
+    <form [formGroup]="generatedForm">
+      <div formArrayName="forms">
+        <div *ngFor="let _form of formSchema?.forms; index as formIndex">
+          <div *ngIf="_form.type === 'array'">
+            <div *ngFor="let form of formsArray.controls; index as i" [formGroupName]="i">
+              <h3>{{_form.formName}}</h3>
+              <ng-container>
+                <div *ngFor="let formField of _form.formFields">
+                  <ng-container *ngIf="formField?.controlType === 'input'">
+                    <input [type]="formField.type" [placeholder]="formField.placeholder" [formControlName]="formField.controlName">
+                  </ng-container>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+          <ng-container *ngIf="_form.type === 'single'">
+            <div *ngFor="let form of abstractedForms; index as i" formArrayName="i">
+              <!-- <h3>{{form.formName}}</h3> -->
+              <ng-container>
+                <div *ngFor="let formField of form.formFields">
+                  <ng-container *ngIf="formField?.controlType === 'input'">
+                    <input [type]="formField.type" [placeholder]="formField.placeholder" [formControlName]="formField.controlName">
+                  </ng-container>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </form>
+
+    {{generatedForm.value | json}}
+  </div>
+</div>
